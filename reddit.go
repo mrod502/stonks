@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/next-alpha/utils/logger"
+	"github.com/mrod502/logger"
 	"github.com/sridharv/reddit-go"
 )
 
@@ -15,7 +15,7 @@ import (
 func GetStream(configFile string) (links []*reddit.Link) {
 	logFile, err := os.OpenFile("stream.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		logger.Error("logger", "error opening log file:", err.Error())
+		logger.Log("logger", "error opening log file:", err.Error())
 		return
 	}
 	defer logFile.Close()
@@ -52,11 +52,11 @@ func GetStream(configFile string) (links []*reddit.Link) {
 		for _, v := range symbols {
 			str += v + ", "
 		}
-		logger.Info(link.URL, str)
+		logger.Log(link.URL, str)
 
 	}
 	if err := stream.Error(); err != nil {
-		logger.Error("stream", err.Error())
+		logger.Log("stream", err.Error())
 	}
 
 	return

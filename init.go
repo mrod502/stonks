@@ -81,53 +81,5 @@ var (
 	patternSlash      = regexp.MustCompile(`/([A-Z]+)`)
 	patternHyperlink  = regexp.MustCompile(`\[[^\]]*\]\(([^\)]*)\)`)
 	bear              = `\ud83c\udf08\ud83d\udc3b`
-	mux               sync.RWMutex
+	mux               = sync.RWMutex{}
 )
-
-/*
-//DoStonks -- do all the stonks
-func DoStonks() {
-	var err error
-
-	//If any fatal error occurs, we want to panic
-
-	home, _ = os.UserHomeDir()
-	OpenDB()
-	//Reddit credentials file location
-	agentPath = path.Join(home, "reddit.agent")
-
-	DataFile = path.Join(home, "sentiment"+xid.New().String()+".bdb")
-	allSent = NewMemCache()
-
-	//Get timezone info for organization of sentiment data
-	timeZone, err = time.LoadLocation("America/New_York")
-	if err != nil {
-
-		logger.Error("timeZone", err.Error())
-		panic(err)
-	}
-	now := time.Now().Format("2006-01-02")
-	s, err := SearchBuckets(now)
-	if err != nil {
-		logger.Error("startup", err.Error())
-	}
-	for _, v := range s {
-		allSent.Set(v)
-	}
-	go func() {
-		for {
-			time.Sleep(SyncInterval)
-			allSent.Sync()
-			for k, v := range allSent.GetAll() {
-				if time.Unix(v.Timestamp, 0).In(timeZone).Format("2006-01-02") != time.Now().In(timeZone).Format("2006-01-02") {
-
-					err := allSent.archive(k)
-					if err != nil {
-						logger.Error("archive", err.Error())
-					}
-				}
-			}
-		}
-	}()
-}
-*/

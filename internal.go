@@ -10,8 +10,7 @@ import (
 	"time"
 
 	"github.com/cdipaolo/sentiment"
-	"github.com/next-alpha/utils/logger"
-
+	"github.com/mrod502/logger"
 	"github.com/turnage/graw/reddit"
 )
 
@@ -40,7 +39,7 @@ func LoadAllSentiment(sent chan Sentiment) (err error) {
 
 			harvest, err := bot.Listing(testURL, "")
 			if err != nil {
-				logger.Error("harvest", err.Error())
+				logger.Log("harvest", err.Error())
 				return
 			}
 			allPosts = harvest.Posts
@@ -67,16 +66,16 @@ func LoadAllSentiment(sent chan Sentiment) (err error) {
 			}
 
 			if URL == "" {
-				logger.Error("no url", URL)
+				logger.Log("no url", URL)
 				return
 			}
 			b, h, err := BrowserRequest(URL)
 			if bytes.Contains(b, []byte("Too Many Requests")) {
-				logger.Error("get", "too many requests, chilling for a bit")
+				logger.Log("get", "too many requests, chilling for a bit")
 				time.Sleep(2 * time.Minute)
 			}
 			if err != nil {
-				logger.Error("request", err.Error())
+				logger.Log("request", err.Error())
 				time.Sleep(1 * time.Minute)
 				continue
 			}
@@ -84,7 +83,7 @@ func LoadAllSentiment(sent chan Sentiment) (err error) {
 
 			if remainingCalls == 0 {
 				if reset != 0 {
-					logger.Warn("Calls", fmt.Sprintf("Remaining:%v | Reset: %v", remainingCalls, reset))
+					logger.Log("Calls", fmt.Sprintf("Remaining:%v | Reset: %v", remainingCalls, reset))
 					time.Sleep(time.Duration(reset+1) * time.Second)
 				} else {
 					time.Sleep(10 * time.Second)
@@ -96,14 +95,14 @@ func LoadAllSentiment(sent chan Sentiment) (err error) {
 			var res JSONResponse
 			err = json.Unmarshal(b, &res)
 			if err != nil {
-				logger.Error("Unmarshal", err.Error())
+				logger.Log("Unmarshal", err.Error())
 			}
 			if len(res) < 2 {
-				logger.Error("Res", "No response")
+				logger.Log("Res", "No response")
 				continue
 			}
 			posts := res[1].GetAllComments()
-			logger.Info("posts", fmt.Sprintf("num comments: %d", len(posts)))
+			logger.Log("posts", fmt.Sprintf("num comments: %d", len(posts)))
 
 			for _, p := range posts {
 				s, _ := getCommentSentiment(p)
@@ -280,7 +279,7 @@ func processMore(m MoreData, comment CommentData) (c []CommentData, err error) {
 			continue
 		}
 		for _, v := range c {
-			logger.Error("", v.Body)
+			logger.Log("", v.Body)
 		}
 	}
 	return
