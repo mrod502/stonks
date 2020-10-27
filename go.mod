@@ -1,4 +1,4 @@
-module github.com/next-alpha/stonks
+module github.com/mrod502/stonks
 
 go 1.15
 
